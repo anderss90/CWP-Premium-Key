@@ -8,7 +8,7 @@ public class Utils {
 	public static boolean hasWallpaper(Context context) {
 		
 		try {
-			context.getPackageManager().getPackageInfo("com.morksoftware.plw", PackageManager.GET_META_DATA);
+			context.getPackageManager().getPackageInfo("com.morksoftware.plwplus", PackageManager.GET_META_DATA);
 		}
 		catch(NameNotFoundException e){
 			return false;

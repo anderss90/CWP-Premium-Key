@@ -2,14 +2,17 @@ package com.morksoftware.keytest;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorListener;
 import android.hardware.SensorManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +20,9 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.morksoftware.keytest.Utils;
 
-public class FirstFragment extends Fragment implements SensorEventListener {
+public class FirstFragment extends Fragment implements SensorEventListener, OnClickListener {
 	
 	private SensorManager sensorManager;	
 	private Sensor sensor;
@@ -32,7 +36,8 @@ public class FirstFragment extends Fragment implements SensorEventListener {
 	private int shakeCount = 0;
 	
 	private TextView mCakeLog;
-	
+	private TextView mGetWallpaper;
+	private Context mCtx =getActivity();
 	public static FirstFragment newInstance() {
 		return new FirstFragment();
 	}	
@@ -73,9 +78,26 @@ public class FirstFragment extends Fragment implements SensorEventListener {
 		View v = null; 
 		
 		v = inflater.inflate(R.layout.fragment_first, null);	
-			
-		mCakeLog = (TextView) v.findViewById(R.id.cake_log);
 		
+		mCakeLog = (TextView) v.findViewById(R.id.cake_log);
+		mGetWallpaper = (TextView) v.findViewById(R.id.get_wallpaper);
+		if (mGetWallpaper!=null){
+			mGetWallpaper.setClickable(true);
+			mGetWallpaper.setOnClickListener(this);
+			if (true){ // com.morksoftware.keytest.Utils.hasWallpaper(getActivity())==false
+				mGetWallpaper.setVisibility(0);
+				mGetWallpaper.setEnabled(true);
+				Log.i("FirstFragment","setting button visible");
+			}
+			else {
+				mGetWallpaper.setVisibility(1);
+				Log.i("FirstFragment","setting button invisible");
+				mGetWallpaper.setEnabled(false);
+			}
+		}
+		else {
+			Log.i("FirstFragment","textview is null");
+		}
 		if(savedInstanceState != null) {
 			shakeCount = savedInstanceState.getInt("shakes");
 			
@@ -168,4 +190,15 @@ public class FirstFragment extends Fragment implements SensorEventListener {
 	}
 	
 	
-}
+	
+	
+
+
+	@Override
+	public void onClick(View v) {
+		// TODO Auto-generated method stub
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		intent.setData(Uri.parse("market://details?id=com.morksoftware.keytest"));
+		startActivity(intent);
+		
+	}}
